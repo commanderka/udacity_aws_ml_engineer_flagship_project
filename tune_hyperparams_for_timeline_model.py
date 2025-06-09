@@ -9,8 +9,10 @@ from sagemaker.tuner import (
 role = sagemaker.get_execution_role()
 
 from sagemaker.pytorch import PyTorch
+from sagemaker.estimator import Estimator
 
 estimator = PyTorch(
+    source_dir=".",
     entry_point="pytorch_mnist.py",
     role=role,
     py_version='py36',
@@ -26,7 +28,7 @@ hyperparameter_ranges = {
 
 objective_metric_name = "average test loss"
 objective_type = "Minimize"
-metric_definitions = [{"Name": "average test loss", "Regex": "Test set: Average loss: ([0-9\\.]+)"}]
+metric_definitions = [{"Name": "MAPE", "Regex": "Mean absolute percentage error: ([0-9\\.]+)%"}]
 
 tuner = HyperparameterTuner(
     estimator,

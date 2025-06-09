@@ -7,6 +7,7 @@ from darts.models.forecasting.random_forest import RandomForest
 import pandas as pd
 from matplotlib import pyplot as plt
 from darts.metrics import mape,r2_score,rmse
+import numpy as np
 
 if __name__ == "__main__":
     stock_prices_with_sentiments = get_stock_prices_with_sentiments(["GOOGL", "AAPL", "MSFT", "AMZN", "TSLA","NESR","NIO","NVDA","META","NFLX", "ALV","CHV","MBG"])
@@ -29,6 +30,7 @@ if __name__ == "__main__":
         for ticker_symbol in stock_prices_with_sentiments["Ticker"].unique():
             for mode in ["with_sentiment", "without_sentiment"]:
                 stock_prices_with_sentiments_and_additional_features_ticker = fill_missing_dates_and_add_additional_cols(stock_prices_with_sentiments, ticker_symbol)
+                stock_prices_with_sentiments_and_additional_features_ticker['Volume'] = stock_prices_with_sentiments_and_additional_features_ticker['Volume'].apply(lambda x: np.log(x) if x > 0 else 0)
 
                 value_cols = ["Average"]
                 if mode == "with_sentiment":
