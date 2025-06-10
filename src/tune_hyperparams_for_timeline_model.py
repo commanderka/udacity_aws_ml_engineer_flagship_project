@@ -37,7 +37,7 @@ estimator = Estimator(
     base_job_name="timeline-model"
 )
 
-#estimator.fit(wait=True, logs=True)
+estimator.fit(wait=True, logs=True)
 
 # Uncomment the following lines if you want to use the PyTorch estimator directly
 
@@ -65,7 +65,7 @@ tuner = HyperparameterTuner(
     objective_metric_name,
     hyperparameter_ranges,
     metric_definitions,
-    max_parallel_jobs=10,
+    max_parallel_jobs=4,
     objective_type=objective_type,
 
 )

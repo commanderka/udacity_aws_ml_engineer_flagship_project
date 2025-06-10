@@ -42,6 +42,7 @@ def train_and_evaluate(args):
     past_covariates_train, past_covariates_test = past_covariates.split_after(pd.Timestamp('2020-01-01'))
     model.fit(train, past_covariates=past_covariates_train)
     #model.fit(train)
+    model.fit()
     forecast = model.predict(len(test), past_covariates=past_covariates)
     #forecast = model.predict(len(test))
     print(f"Mean absolute percentage error: {mape(series, forecast):.2f}%.")

@@ -1,13 +1,16 @@
-import argparse
-from stock_price_fetcher import get_historic_stock_prices
-from darts import TimeSeries
+import yfinance as yf
 import pandas as pd
+from darts import TimeSeries
+from darts.models import ExponentialSmoothing, AutoARIMA, XGBModel, NBEATSModel, RNNModel, TCNModel
 import numpy as np
-from darts.models import Prophet, XGBModel
 from darts.metrics import mape
+from matplotlib import pyplot as plt
+from news_fetcher import fetch_news
+import pickle 
+from stock_price_fetcher import get_historic_stock_prices
 
+if __name__ == "__main__":
 
-def train_and_evaluate(args):
 
     ticker_symbols = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA","NESR","NIO","NVDA","META","NFLX", "ALV","CHV","MBG"]
     
@@ -33,37 +36,19 @@ def train_and_evaluate(args):
     series = TimeSeries.from_dataframe(flat_df_google,time_col='Date',                                      
                                       value_cols=value_cols, fill_missing_dates=False)
     
-    model = XGBModel(lags=args.lag,lags_past_covariates=args.lag,)
+    #model = XGBModel(lags=30,lags_past_covariates=30,)
     #model = NBEATSModel(input_chunk_length=30, output_chunk_length=10, n_epochs=10, random_state=42)
     #model = AutoARIMA()
     #model = TCNModel(input_chunk_length=30, output_chunk_length=10, n_epochs=10, random_state=42)
-    #model = Prophet()
+    model = ExponentialSmoothing()
     train, test = series.split_after(pd.Timestamp('2020-01-01'))
     past_covariates_train, past_covariates_test = past_covariates.split_after(pd.Timestamp('2020-01-01'))
-    model.fit(train, past_covariates=past_covariates_train)
-    #model.fit(train)
-    forecast = model.predict(len(test), past_covariates=past_covariates)
-    #forecast = model.predict(len(test))
+    #model.fit(train, past_covariates=past_covariates_train)
+    model.fit(train)
+    #forecast = model.predict(len(test), past_covariates=past_covariates)
+    forecast = model.predict(len(test))
+    series.plot()
+    forecast.plot(label="forecast")
+    plt.savefig("forecast.png")
     print(f"Mean absolute percentage error: {mape(series, forecast):.2f}%.")
-
-
-
-def main():
-    # Training settings
-    parser = argparse.ArgumentParser(description="PyTorch MNIST Example")
-    parser.add_argument(
-        "--lag",
-        type=int,
-        default=10,
-        metavar="N",
-        help="Lag for time series prediction (default: 10)",
-    )
-
-    args = parser.parse_args()
-    train_and_evaluate(args)
-
-    
-
-    
-if __name__ == "__main__":
-    main()
+    pass
