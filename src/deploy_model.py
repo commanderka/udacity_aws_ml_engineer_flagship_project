@@ -62,6 +62,6 @@ if __name__ == "__main__":
         #entry_point=os.path.join(current_file_dir,'inference.py'),
     )
 
-    instance_type = "ml.t2.medium"
-    predictor=darts_model.deploy(initial_instance_count=1, instance_type="local")
+    instance_type = "ml.t2.xlarge"
+    predictor=darts_model.deploy(initial_instance_count=1, instance_type=instance_type)
     predictions = predictor.predict({"instances": [{"ticker_symbol": "AAPL", "n_days": 30}]})
