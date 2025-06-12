@@ -11,7 +11,6 @@ def get_historic_stock_prices(ticker_symbols, period='20y'):
     historic_data = yf.download(ticker_symbol_str, period=period)
     flat_df = historic_data.stack(level=1).reset_index()
     #compute the average price for each ticker symbol
-    flat_df.drop(columns=['Adj Close'], inplace=True)
     flat_df['Average'] = (flat_df['Open'] + flat_df['Close']) / 2
     return flat_df
 

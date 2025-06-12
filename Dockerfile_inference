@@ -1,0 +1,9 @@
+FROM 468155809742.dkr.ecr.us-east-1.amazonaws.com/python/train-image
+WORKDIR /app
+COPY inference.py .
+RUN pip install sagemaker-inference fastapi uvicorn
+# setup the executable path
+ENV PATH="/app/:${PATH}"
+ENV PYTHONUNBUFFERED=TRUE
+COPY run_server.py /app/serve
+RUN chmod +x /app/serve

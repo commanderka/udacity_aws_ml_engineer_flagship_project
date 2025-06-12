@@ -8,8 +8,10 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from darts.metrics import mape,r2_score,rmse
 import numpy as np
+import os
 
 if __name__ == "__main__":
+    current_file_dir = os.path.dirname(current_file_path = os.path.abspath(__file__)) 
     stock_prices_with_sentiments = get_stock_prices_with_sentiments(["GOOGL", "AAPL", "MSFT", "AMZN", "TSLA","NESR","NIO","NVDA","META","NFLX", "ALV","CHV","MBG"])
     #evalute the prediction performance with and without sentiments
     n_lags = 10
@@ -66,7 +68,7 @@ if __name__ == "__main__":
     plt.ylabel("Mean Absolute Percentage Error (MAPE)")
     plt.legend()
     plt.grid()
-    plt.savefig("mape_with_without_sentiment.png")
+    plt.savefig(os.path.join(current_file_dir,"mape_with_without_sentiment.png"))
     plt.show()
     plt.figure(figsize=(12, 6))
     plt.plot(range(1, 11), r2_score_mean["with_sentiment"], label="With Sentiment", marker='o')
@@ -76,7 +78,7 @@ if __name__ == "__main__":
     plt.ylabel("R2 Score")
     plt.legend()
     plt.grid()
-    plt.savefig("r2_score_with_without_sentiment.png")
+    plt.savefig(os.path.join(current_file_dir,"r2_score_with_without_sentiment.png"))
     plt.show()
     plt.figure(figsize=(12, 6))
     plt.plot(range(1, 11), rmse_mean["with_sentiment"], label="With Sentiment", marker='o')
@@ -86,7 +88,7 @@ if __name__ == "__main__":
     plt.ylabel("Root Mean Squared Error (RMSE)")
     plt.legend()
     plt.grid()
-    plt.savefig("rmse_with_without_sentiment.png")
+    plt.savefig(os.path.join(current_file_dir,"rmse_with_without_sentiment.png"))
     plt.show()
     #save the metrics to a csv file
             

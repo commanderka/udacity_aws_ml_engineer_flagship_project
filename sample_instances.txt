@@ -1,0 +1,12 @@
+{
+  "instances": [
+    {
+      "ticker_symbol": "AAPL",
+      "n_days": 30
+    },
+    {
+      "ticker_symbol": "GOOGL",
+      "n_days": 10
+    }
+  ]
+}
